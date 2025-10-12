@@ -1,7 +1,7 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Camera, AlertCircle, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Camera, AlertCircle } from 'lucide-react';
 
 // Import A-Frame and AR.js
 import 'aframe';
@@ -12,8 +12,7 @@ declare global {
   namespace JSX {
     interface IntrinsicElements {
       'a-scene': any;
-      'a-camera': any;
-      'a-marker': any;
+      'a-marker-camera': any;
       'a-entity': any;
       'a-light': any;
       'a-text': any;
@@ -29,51 +28,18 @@ const ARViewer = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [cameraPermission, setCameraPermission] = useState<boolean | null>(null);
 
   useEffect(() => {
-    // Check camera permission
-    const checkCameraPermission = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        setCameraPermission(true);
-        stream.getTracks().forEach(track => track.stop()); // Stop the stream immediately
-      } catch (err) {
-        setCameraPermission(false);
-        setError('Camera permission denied. Please allow camera access to use AR features.');
-      }
-    };
+    if (!modelUrl) {
+      setError('No model URL provided. Please select a dish from the menu.');
+      setIsLoading(false);
+      return;
+    }
 
-    checkCameraPermission();
+    // Small delay to allow A-Frame to initialize
+    const timer = setTimeout(() => setIsLoading(false), 500);
 
-    // Initialize A-Frame scene when component mounts
-    const initializeAR = () => {
-      if (!modelUrl) {
-        setError('No model URL provided. Please select a dish from the menu.');
-        setIsLoading(false);
-        return;
-      }
-
-      // Wait for A-Frame to be ready
-      if (typeof AFRAME !== 'undefined') {
-        setIsLoading(false);
-      } else {
-        setTimeout(initializeAR, 100);
-      }
-    };
-
-    initializeAR();
-
-    // Cleanup function
-    return () => {
-      // Clean up any A-Frame scenes if needed
-      const scenes = document.querySelectorAll('a-scene');
-      scenes.forEach(scene => {
-        if (scene.parentNode) {
-          scene.parentNode.removeChild(scene);
-        }
-      });
-    };
+    return () => clearTimeout(timer);
   }, [modelUrl]);
 
   const handleBackToMenu = () => {
@@ -87,7 +53,10 @@ const ARViewer = () => {
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto" />
           <h2 className="text-2xl font-bold text-gray-800">AR Viewer Error</h2>
           <p className="text-gray-600">{error}</p>
-          <Button onClick={handleBackToMenu} className="w-full bg-orange-500 hover:bg-orange-600 text-white">
+          <Button
+            onClick={handleBackToMenu}
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white"
+          >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Menu
           </Button>
@@ -96,7 +65,7 @@ const ARViewer = () => {
     );
   }
 
-  if (isLoading || cameraPermission === null) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 flex items-center justify-center">
         <div className="text-center space-y-4">
@@ -130,86 +99,35 @@ const ARViewer = () => {
           <span className="font-semibold text-gray-800">AR Instructions</span>
         </div>
         <p className="text-sm text-gray-600">
-          Point your camera at a flat surface (like a table) and tap to place the 3D dish model.
+          Point your camera at a Hiro marker (or printed QR marker) to see the 3D dish model.
         </p>
       </div>
 
-      {/* A-Frame AR Scene with Surface Tracking */}
+      {/* A-Frame AR Scene */}
       <a-scene
         embedded
-        arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+        arjs="sourceType: webcam; debugUIEnabled: false;"
         vr-mode-ui="enabled: false"
         className="w-full h-screen"
       >
-        {/* Camera */}
-        <a-camera
-          position="0 0 0"
-          look-controls="enabled: true"
-          wasd-controls="enabled: false"
-        ></a-camera>
-
-        {/* Surface-based AR using NFT markers or plane detection */}
-        <a-marker
+        {/* Marker Camera */}
+        <a-marker-camera
           preset="hiro"
           type="pattern"
           url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/data/patt.hiro"
-          smooth="true"
-          smoothCount="10"
-          smoothTolerance="0.01"
-          smoothThreshold="5"
-        >
-          {/* 3D Model */}
-          <a-entity
-            gltf-model={`url(${modelUrl})`}
-            scale="0.3 0.3 0.3"
-            position="0 0.1 0"
-            rotation="0 0 0"
-            id="dish-model"
-          ></a-entity>
+        ></a-marker-camera>
 
-          {/* Lighting for better model visibility */}
-          <a-light
-            type="directional"
-            intensity="1.5"
-            position="1 1 1"
-            castShadow="true"
-          ></a-light>
-
-          {/* Ambient light */}
-          <a-light
-            type="ambient"
-            intensity="0.5"
-            color="#ffffff"
-          ></a-light>
-        </a-marker>
-
-        {/* Alternative: Use plane detection for surface placement */}
+        {/* 3D Model */}
         <a-entity
-          id="surface-plane"
-          geometry="primitive: plane; width: 2; height: 2"
-          material="color: #ffffff; opacity: 0.1; transparent: true"
-          position="0 0 -2"
-          rotation="-90 0 0"
-          arjs-hit-test
-          visible="false"
+          gltf-model={`url(${modelUrl})`}
+          scale="0.3 0.3 0.3"
+          position="0 0.1 0"
+          rotation="0 0 0"
         ></a-entity>
 
-        {/* Fallback content when no surface is detected */}
-        <a-entity position="0 0 -5">
-          <a-text
-            value="Point camera at a flat surface or Hiro marker"
-            align="center"
-            color="white"
-            position="0 1 0"
-            scale="2 2 2"
-          ></a-text>
-          <a-plane
-            width="3"
-            height="3"
-            color="#333333"
-            opacity="0.3"
-          ></a-plane>
-        </a-entity>
+        {/* Lighting */}
+        <a-light type="directional" intensity="1.5" position="1 1 1"></a-light>
+        <a-light type="ambient" intensity="0.5"></a-light>
       </a-scene>
 
       {/* Loading overlay for model */}
