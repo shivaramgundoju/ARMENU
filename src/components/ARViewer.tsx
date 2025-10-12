@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Camera, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Camera, AlertCircle, RotateCcw } from 'lucide-react';
 
 // Import A-Frame and AR.js
 import 'aframe';
@@ -130,14 +130,14 @@ const ARViewer = () => {
           <span className="font-semibold text-gray-800">AR Instructions</span>
         </div>
         <p className="text-sm text-gray-600">
-          Point your camera at a Hiro marker to see the 3D dish model appear.
+          Point your camera at a flat surface (like a table) and tap to place the 3D dish model.
         </p>
       </div>
 
-      {/* A-Frame AR Scene */}
+      {/* A-Frame AR Scene with Surface Tracking */}
       <a-scene
         embedded
-        arjs="sourceType: webcam; debugUIEnabled: false;"
+        arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
         vr-mode-ui="enabled: false"
         className="w-full h-screen"
       >
@@ -148,42 +148,66 @@ const ARViewer = () => {
           wasd-controls="enabled: false"
         ></a-camera>
 
-        {/* AR Marker */}
+        {/* Surface-based AR using NFT markers or plane detection */}
         <a-marker
           preset="hiro"
           type="pattern"
           url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/data/patt.hiro"
+          smooth="true"
+          smoothCount="10"
+          smoothTolerance="0.01"
+          smoothThreshold="5"
         >
           {/* 3D Model */}
           <a-entity
             gltf-model={`url(${modelUrl})`}
-            scale="0.5 0.5 0.5"
-            position="0 0 0"
+            scale="0.3 0.3 0.3"
+            position="0 0.1 0"
             rotation="0 0 0"
+            id="dish-model"
           ></a-entity>
 
-          {/* Optional: Add some lighting */}
+          {/* Lighting for better model visibility */}
           <a-light
             type="directional"
-            intensity="1"
+            intensity="1.5"
             position="1 1 1"
-            target="#model"
+            castShadow="true"
+          ></a-light>
+
+          {/* Ambient light */}
+          <a-light
+            type="ambient"
+            intensity="0.5"
+            color="#ffffff"
           ></a-light>
         </a-marker>
 
-        {/* Fallback content when marker is not detected */}
+        {/* Alternative: Use plane detection for surface placement */}
+        <a-entity
+          id="surface-plane"
+          geometry="primitive: plane; width: 2; height: 2"
+          material="color: #ffffff; opacity: 0.1; transparent: true"
+          position="0 0 -2"
+          rotation="-90 0 0"
+          arjs-hit-test
+          visible="false"
+        ></a-entity>
+
+        {/* Fallback content when no surface is detected */}
         <a-entity position="0 0 -5">
           <a-text
-            value="Point camera at Hiro marker"
+            value="Point camera at a flat surface or Hiro marker"
             align="center"
             color="white"
             position="0 1 0"
+            scale="2 2 2"
           ></a-text>
           <a-plane
-            width="2"
-            height="2"
-            color="gray"
-            opacity="0.5"
+            width="3"
+            height="3"
+            color="#333333"
+            opacity="0.3"
           ></a-plane>
         </a-entity>
       </a-scene>
