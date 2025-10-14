@@ -110,7 +110,7 @@ const ARViewer = () => {
   }
 
   return (
-    <div className="relative min-h-screen">
+    <div className="fixed inset-0 overflow-hidden">
       {/* Back Button */}
       <div className="absolute top-4 left-4 z-50">
         <Button
@@ -138,9 +138,17 @@ const ARViewer = () => {
       {/* A-Frame AR Scene */}
       <a-scene
         embedded
-        arjs="sourceType: webcam; debugUIEnabled: false;"
+        arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best; patternRatio: 0.75;"
         vr-mode-ui="enabled: false"
         className="w-full h-screen"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          zIndex: 1
+        }}
       >
         {/* Camera for markerless AR */}
         <a-entity camera></a-entity>
