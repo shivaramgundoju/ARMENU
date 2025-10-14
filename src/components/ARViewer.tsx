@@ -36,10 +36,42 @@ const ARViewer = () => {
       return;
     }
 
-    // Small delay to allow A-Frame to initialize
-    const timer = setTimeout(() => setIsLoading(false), 500);
+    // Request camera permission explicitly
+    const requestCameraPermission = async () => {
+      try {
+        await navigator.mediaDevices.getUserMedia({ video: true });
+        // Small delay to allow A-Frame to initialize
+        const timer = setTimeout(() => setIsLoading(false), 500);
+        return () => clearTimeout(timer);
+      } catch (err) {
+        setError('Camera access is required for AR experience. Please allow camera access and refresh the page.');
+        setIsLoading(false);
+      }
+    };
 
-    return () => clearTimeout(timer);
+    requestCameraPermission();
+
+    // Add event listeners for A-Frame scene errors
+    const handleSceneError = (event: any) => {
+      console.error('A-Frame scene error:', event.detail);
+      setError('Failed to initialize AR scene. Please refresh the page and try again.');
+    };
+
+    const handleModelError = (event: any) => {
+      console.error('Model loading error:', event.detail);
+      setError('Failed to load 3D model. Please check your internet connection and try again.');
+    };
+
+    // Listen for A-Frame events
+    document.addEventListener('arjs-video-error', handleSceneError);
+    document.addEventListener('arjs-nft-error', handleSceneError);
+    document.addEventListener('model-error', handleModelError);
+
+    return () => {
+      document.removeEventListener('arjs-video-error', handleSceneError);
+      document.removeEventListener('arjs-nft-error', handleSceneError);
+      document.removeEventListener('model-error', handleModelError);
+    };
   }, [modelUrl]);
 
   const handleBackToMenu = () => {
@@ -99,7 +131,7 @@ const ARViewer = () => {
           <span className="font-semibold text-gray-800">AR Instructions</span>
         </div>
         <p className="text-sm text-gray-600">
-          Point your camera at a Hiro marker (or printed QR marker) to see the 3D dish model.
+          Point your camera at a Hiro marker to see the 3D dish model. If you see a black screen, ensure camera access is granted and try refreshing the page.
         </p>
       </div>
 
