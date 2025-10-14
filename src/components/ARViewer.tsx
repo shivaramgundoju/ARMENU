@@ -131,27 +131,27 @@ const ARViewer = () => {
           <span className="font-semibold text-gray-800">AR Instructions</span>
         </div>
         <p className="text-sm text-gray-600">
-          Point your camera at a Hiro marker to see the 3D dish model. If you see a black screen, ensure camera access is granted and try refreshing the page.
+          The 3D model should appear in your camera view. If you see a black screen, ensure camera access is granted and try refreshing the page.
         </p>
       </div>
 
       {/* A-Frame AR Scene */}
       <a-scene
         embedded
-        arjs="sourceType: webcam; debugUIEnabled: false;"
+        arjs="sourceType: webcam; debugUIEnabled: true;"
         vr-mode-ui="enabled: false"
         className="w-full h-screen"
       >
-        {/* Non-marker AR (works on plane surface) */}
+        {/* Camera for markerless AR */}
         <a-entity camera></a-entity>
 
+        {/* 3D Model positioned in front of camera */}
         <a-entity
           gltf-model={`url(${modelUrl})`}
           scale="0.3 0.3 0.3"
           position="0 0 -2"
           rotation="0 45 0"
         ></a-entity>
-
 
         {/* Lighting */}
         <a-light type="directional" intensity="1.5" position="1 1 1"></a-light>
