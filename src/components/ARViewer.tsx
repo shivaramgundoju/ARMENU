@@ -111,36 +111,11 @@ const ARViewer = () => {
 
   return (
     <div className="fixed inset-0 overflow-hidden">
-      {/* Back Button */}
-      <div className="absolute top-4 left-4 z-50">
-        <Button
-          onClick={handleBackToMenu}
-          variant="secondary"
-          size="lg"
-          className="bg-white/90 hover:bg-white text-gray-800 shadow-lg"
-        >
-          <ArrowLeft className="w-5 h-5 mr-2" />
-          Back to Menu
-        </Button>
-      </div>
-
-      {/* Instructions */}
-      <div className="absolute top-4 right-4 z-50 bg-white/90 rounded-lg p-4 max-w-xs">
-        <div className="flex items-center gap-2 mb-2">
-          <Camera className="w-5 h-5 text-orange-500" />
-          <span className="font-semibold text-gray-800">AR Instructions</span>
-        </div>
-        <p className="text-sm text-gray-600">
-          The 3D model should appear in your camera view.
-        </p>
-      </div>
-
-      {/* A-Frame AR Scene */}
+      {/* A-Frame AR Scene - Full Screen */}
       <a-scene
         embedded
         arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best; patternRatio: 0.75;"
         vr-mode-ui="enabled: false"
-        className="w-full h-screen"
         style={{
           position: 'fixed',
           top: 0,
@@ -165,6 +140,19 @@ const ARViewer = () => {
         <a-light type="directional" intensity="1.5" position="1 1 1"></a-light>
         <a-light type="ambient" intensity="0.5"></a-light>
       </a-scene>
+
+      {/* Minimal Back Button - Positioned outside camera view */}
+      <div className="absolute top-4 left-4 z-50">
+        <Button
+          onClick={handleBackToMenu}
+          variant="secondary"
+          size="sm"
+          className="bg-black/50 hover:bg-black/70 text-white border-white/20"
+        >
+          <ArrowLeft className="w-4 h-4 mr-1" />
+          Back
+        </Button>
+      </div>
     </div>
   );
 };
