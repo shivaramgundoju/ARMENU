@@ -16,7 +16,7 @@ const mockDishes = [
     price: 14.99,
     category: "Main Course",
     image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400&h=300&fit=crop",
-    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf"
+    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Chicken/glTF/Chicken.gltf"
   },
   {
     id: 2,
@@ -25,7 +25,7 @@ const mockDishes = [
     price: 12.99,
     category: "Main Course",
     image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop",
-    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf"
+    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Pizza/glTF/Pizza.gltf"
   },
   {
     id: 3,
@@ -34,7 +34,7 @@ const mockDishes = [
     price: 8.99,
     category: "Starters",
     image: "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400&h=300&fit=crop",
-    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf"
+    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Salad/glTF/Salad.gltf"
   },
   {
     id: 4,
@@ -43,7 +43,7 @@ const mockDishes = [
     price: 6.99,
     category: "Desserts",
     image: "https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=400&h=300&fit=crop",
-    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf"
+    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/ChocolateCake/glTF/ChocolateCake.gltf"
   },
   {
     id: 5,
@@ -52,7 +52,7 @@ const mockDishes = [
     price: 4.99,
     category: "Beverages",
     image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400&h=300&fit=crop",
-    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf"
+    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Orange/glTF/Orange.gltf"
   },
   {
     id: 6,
@@ -61,7 +61,7 @@ const mockDishes = [
     price: 7.99,
     category: "Starters",
     image: "https://images.unsplash.com/photo-1625395005224-0fce68a61f7f?w=400&h=300&fit=crop",
-    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf"
+    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/SpringRoll/glTF/SpringRoll.gltf"
   },
   {
     id: 7,
@@ -70,7 +70,7 @@ const mockDishes = [
     price: 18.99,
     category: "Main Course",
     image: "https://images.unsplash.com/photo-1580959375944-57b487fab2b0?w=400&h=300&fit=crop",
-    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf"
+    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Salmon/glTF/Salmon.gltf"
   },
   {
     id: 8,
@@ -79,9 +79,10 @@ const mockDishes = [
     price: 7.99,
     category: "Desserts",
     image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&h=300&fit=crop",
-    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf"
+    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Tiramisu/glTF/Tiramisu.gltf"
   }
 ];
+
 
 const MenuGrid = () => {
   const navigate = useNavigate();
