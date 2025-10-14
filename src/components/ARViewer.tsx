@@ -142,20 +142,16 @@ const ARViewer = () => {
         vr-mode-ui="enabled: false"
         className="w-full h-screen"
       >
-        {/* Marker Camera */}
-        <a-marker-camera
-          preset="hiro"
-          type="pattern"
-          url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/data/patt.hiro"
-        ></a-marker-camera>
+        {/* Non-marker AR (works on plane surface) */}
+        <a-entity camera></a-entity>
 
-        {/* 3D Model */}
         <a-entity
           gltf-model={`url(${modelUrl})`}
           scale="0.3 0.3 0.3"
-          position="0 0.1 0"
-          rotation="0 0 0"
+          position="0 0 -2"
+          rotation="0 45 0"
         ></a-entity>
+
 
         {/* Lighting */}
         <a-light type="directional" intensity="1.5" position="1 1 1"></a-light>
