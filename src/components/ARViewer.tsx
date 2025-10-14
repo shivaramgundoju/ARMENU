@@ -12,11 +12,8 @@ declare global {
   namespace JSX {
     interface IntrinsicElements {
       'a-scene': any;
-      'a-marker-camera': any;
       'a-entity': any;
       'a-light': any;
-      'a-text': any;
-      'a-plane': any;
     }
   }
 }
@@ -34,10 +31,9 @@ const ARViewer = () => {
       return;
     }
 
-    // Request camera permission explicitly
     const requestCameraPermission = async () => {
       try {
-        await navigator.mediaDevices.getUserMedia({ video: true });
+        await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
       } catch (err) {
         setError('Camera access is required for AR experience. Please allow camera access and refresh the page.');
       }
@@ -45,7 +41,6 @@ const ARViewer = () => {
 
     requestCameraPermission();
 
-    // Add event listeners for A-Frame scene errors
     const handleSceneError = (event: any) => {
       console.error('A-Frame scene error:', event.detail);
       setError('Failed to initialize AR scene. Please refresh the page and try again.');
@@ -56,7 +51,6 @@ const ARViewer = () => {
       setError('Failed to load 3D model. Please check your internet connection and try again.');
     };
 
-    // Listen for A-Frame events
     document.addEventListener('arjs-video-error', handleSceneError);
     document.addEventListener('arjs-nft-error', handleSceneError);
     document.addEventListener('model-error', handleModelError);
@@ -92,48 +86,40 @@ const ARViewer = () => {
   }
 
   return (
-    <div
-      className="fixed inset-0 overflow-hidden"
-      style={{
-        width: '100vw',
-        height: '100vh',
-        margin: 0,
-        padding: 0,
-        backgroundColor: 'black'
-      }}
-    >
-      {/* A-Frame AR Scene - Full Screen */}
+    <div className="fixed inset-0 overflow-hidden">
       <a-scene
         embedded
-        arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best; patternRatio: 0.75; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
-        renderer="antialias: false;"
+        vr-mode-ui="enabled: false"
+        arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+        renderer="antialias: true; alpha: true;"
         style={{
           position: 'fixed',
           top: 0,
           left: 0,
           width: '100vw',
           height: '100vh',
-          zIndex: 1,
           margin: 0,
-          padding: 0
+          padding: 0,
+          zIndex: 1,
         }}
       >
-        {/* Camera for markerless AR */}
+        {/* Camera */}
         <a-entity camera></a-entity>
 
-        {/* 3D Model positioned in front of camera */}
+        {/* Your 3D model */}
         <a-entity
           gltf-model={`url(${modelUrl})`}
           scale="0.3 0.3 0.3"
-          position="0 0 -2"
-          rotation="0 45 0"
+          position="0 0 -1.5"
+          rotation="0 0 0"
         ></a-entity>
 
-        {/* Minimal Lighting */}
-        <a-light type="ambient" intensity="0.8"></a-light>
+        {/* Lighting */}
+        <a-light type="ambient" intensity="1"></a-light>
+        <a-light type="directional" intensity="0.5" position="1 2 1"></a-light>
       </a-scene>
 
-      {/* Minimal Back Button - Positioned outside camera view */}
+      {/* Back Button */}
       <div className="absolute top-4 left-4 z-50">
         <Button
           onClick={handleBackToMenu}
