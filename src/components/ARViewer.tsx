@@ -21,6 +21,14 @@ const ARViewer = () => {
   const modelUrl = searchParams.get('model');
   const [error, setError] = useState<string | null>(null);
 
+  // Fix viewport for mobile full-screen
+  useEffect(() => {
+    const meta = document.createElement('meta');
+    meta.name = 'viewport';
+    meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+    document.head.appendChild(meta);
+  }, []);
+
   useEffect(() => {
     if (!modelUrl) {
       setError('No model URL provided. Please select a dish from the menu.');
@@ -44,6 +52,7 @@ const ARViewer = () => {
       console.error('Model loading error:', event.detail);
       setError('Failed to load 3D model. Please check your internet connection and try again.');
     };
+
     document.addEventListener('arjs-video-error', handleSceneError);
     document.addEventListener('arjs-nft-error', handleSceneError);
     document.addEventListener('model-error', handleModelError);
@@ -54,12 +63,6 @@ const ARViewer = () => {
       document.removeEventListener('model-error', handleModelError);
     };
   }, [modelUrl]);
-
-  // Force mobile full-screen
-  useEffect(() => {
-    const scene = document.querySelector('a-scene');
-    if (scene && scene.enterVR) scene.enterVR();
-  }, []);
 
   const handleBackToMenu = () => navigate('/');
 
@@ -138,21 +141,21 @@ const ARViewer = () => {
   return (
     <div className="fixed inset-0 overflow-hidden">
       <a-scene
-        vr-mode-ui="enabled: false"
+        embedded
         arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
         renderer="antialias: true; alpha: true;"
         style={{
           position: 'fixed',
           top: 0,
           left: 0,
-          width: '100%',
-          height: '100%',
+          width: '100vw',
+          height: '100vh',
           margin: 0,
           padding: 0,
           zIndex: 1,
         }}
       >
-        <a-entity camera></a-entity>
+        <a-entity camera look-controls="enabled: false"></a-entity>
 
         <a-entity
           id="ar-model"
