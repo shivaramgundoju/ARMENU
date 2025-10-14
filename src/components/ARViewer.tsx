@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Camera, AlertCircle } from 'lucide-react';
+import { ArrowLeft, AlertCircle } from 'lucide-react';
 
 // Import A-Frame and AR.js
 import 'aframe';
@@ -26,13 +26,11 @@ const ARViewer = () => {
   const [searchParams] = useSearchParams();
   const modelUrl = searchParams.get('model');
 
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!modelUrl) {
       setError('No model URL provided. Please select a dish from the menu.');
-      setIsLoading(false);
       return;
     }
 
@@ -40,12 +38,8 @@ const ARViewer = () => {
     const requestCameraPermission = async () => {
       try {
         await navigator.mediaDevices.getUserMedia({ video: true });
-        // Small delay to allow A-Frame to initialize
-        const timer = setTimeout(() => setIsLoading(false), 500);
-        return () => clearTimeout(timer);
       } catch (err) {
         setError('Camera access is required for AR experience. Please allow camera access and refresh the page.');
-        setIsLoading(false);
       }
     };
 
@@ -97,18 +91,6 @@ const ARViewer = () => {
     );
   }
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="text-xl font-semibold text-gray-700">Initializing AR Experience...</p>
-          <p className="text-gray-500">Please allow camera access when prompted</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div
       className="fixed inset-0 overflow-hidden"
@@ -124,7 +106,6 @@ const ARViewer = () => {
       <a-scene
         embedded
         arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best; patternRatio: 0.75; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
-        vr-mode-ui="enabled: false"
         renderer="antialias: false;"
         style={{
           position: 'fixed',
