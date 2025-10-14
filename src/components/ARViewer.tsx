@@ -3,11 +3,11 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, AlertCircle } from 'lucide-react';
 
-// Import A-Frame and AR.js
+// Import A-Frame, AR.js, and gesture-detector
 import 'aframe';
 import 'ar.js/aframe/build/aframe-ar.js';
+import 'aframe-gesture-detector-component'; // Required for pinch/rotate gestures
 
-// Extend JSX namespace for A-Frame elements
 declare global {
   namespace JSX {
     interface IntrinsicElements {
@@ -24,6 +24,9 @@ const ARViewer = () => {
   const modelUrl = searchParams.get('model');
 
   const [error, setError] = useState<string | null>(null);
+
+  // Helper: parse space-separated vector string into numbers
+  const parseVector = (value: string) => value.split(' ').map(parseFloat);
 
   useEffect(() => {
     if (!modelUrl) {
@@ -62,9 +65,52 @@ const ARViewer = () => {
     };
   }, [modelUrl]);
 
-  const handleBackToMenu = () => {
-    navigate('/');
-  };
+  // Force full-screen on mobile
+  useEffect(() => {
+    const scene = document.querySelector('a-scene');
+    if (scene && scene.enterVR) {
+      scene.enterVR();
+    }
+  }, []);
+
+  const handleBackToMenu = () => navigate('/');
+
+  // Gesture handling for pinch/rotate
+  useEffect(() => {
+    const model = document.getElementById('ar-model');
+    if (!model) return;
+
+    let currentScale = 0.3;
+    let currentRotation = 0;
+
+    const onPinch = (event: any) => {
+      const scale = currentScale * event.detail.scale;
+      model.setAttribute('scale', `${scale} ${scale} ${scale}`);
+    };
+
+    const onRotate = (event: any) => {
+      const rotation = currentRotation + event.detail.positionChange.x * 180;
+      model.setAttribute('rotation', `0 ${rotation} 0`);
+    };
+
+    const onGestureEnd = () => {
+      const scaleValues = parseVector(model.getAttribute('scale') as string);
+      currentScale = scaleValues[0];
+
+      const rotationValues = parseVector(model.getAttribute('rotation') as string);
+      currentRotation = rotationValues[1];
+    };
+
+    model.addEventListener('pinch', onPinch);
+    model.addEventListener('rotate', onRotate);
+    model.addEventListener('gestureend', onGestureEnd);
+
+    return () => {
+      model.removeEventListener('pinch', onPinch);
+      model.removeEventListener('rotate', onRotate);
+      model.removeEventListener('gestureend', onGestureEnd);
+    };
+  }, []);
 
   if (error) {
     return (
@@ -88,7 +134,6 @@ const ARViewer = () => {
   return (
     <div className="fixed inset-0 overflow-hidden">
       <a-scene
-        embedded
         vr-mode-ui="enabled: false"
         arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
         renderer="antialias: true; alpha: true;"
@@ -96,8 +141,8 @@ const ARViewer = () => {
           position: 'fixed',
           top: 0,
           left: 0,
-          width: '100vw',
-          height: '100vh',
+          width: '100%',
+          height: '100%',
           margin: 0,
           padding: 0,
           zIndex: 1,
@@ -106,8 +151,10 @@ const ARViewer = () => {
         {/* Camera */}
         <a-entity camera></a-entity>
 
-        {/* Your 3D model */}
+        {/* 3D Model */}
         <a-entity
+          id="ar-model"
+          gesture-detector
           gltf-model={`url(${modelUrl})`}
           scale="0.3 0.3 0.3"
           position="0 0 -1.5"
