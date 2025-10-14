@@ -110,19 +110,31 @@ const ARViewer = () => {
   }
 
   return (
-    <div className="fixed inset-0 overflow-hidden">
+    <div
+      className="fixed inset-0 overflow-hidden"
+      style={{
+        width: '100vw',
+        height: '100vh',
+        margin: 0,
+        padding: 0,
+        backgroundColor: 'black'
+      }}
+    >
       {/* A-Frame AR Scene - Full Screen */}
       <a-scene
         embedded
-        arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best; patternRatio: 0.75;"
+        arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best; patternRatio: 0.75; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
         vr-mode-ui="enabled: false"
+        renderer="antialias: false;"
         style={{
           position: 'fixed',
           top: 0,
           left: 0,
           width: '100vw',
           height: '100vh',
-          zIndex: 1
+          zIndex: 1,
+          margin: 0,
+          padding: 0
         }}
       >
         {/* Camera for markerless AR */}
@@ -136,9 +148,8 @@ const ARViewer = () => {
           rotation="0 45 0"
         ></a-entity>
 
-        {/* Lighting */}
-        <a-light type="directional" intensity="1.5" position="1 1 1"></a-light>
-        <a-light type="ambient" intensity="0.5"></a-light>
+        {/* Minimal Lighting */}
+        <a-light type="ambient" intensity="0.8"></a-light>
       </a-scene>
 
       {/* Minimal Back Button - Positioned outside camera view */}
