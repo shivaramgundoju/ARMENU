@@ -2,13 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, AlertCircle } from 'lucide-react';
-import 'aframe-gesture-detector-component';
-
-
-// Import A-Frame, AR.js, and gesture-detector
 import 'aframe';
 import 'ar.js/aframe/build/aframe-ar.js';
-import 'aframe-gesture-detector-component'; // Required for pinch/rotate gestures
 
 declare global {
   namespace JSX {
@@ -24,11 +19,7 @@ const ARViewer = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const modelUrl = searchParams.get('model');
-
   const [error, setError] = useState<string | null>(null);
-
-  // Helper: parse space-separated vector string into numbers
-  const parseVector = (value: string) => value.split(' ').map(parseFloat);
 
   useEffect(() => {
     if (!modelUrl) {
@@ -43,19 +34,16 @@ const ARViewer = () => {
         setError('Camera access is required for AR experience. Please allow camera access and refresh the page.');
       }
     };
-
     requestCameraPermission();
 
     const handleSceneError = (event: any) => {
       console.error('A-Frame scene error:', event.detail);
       setError('Failed to initialize AR scene. Please refresh the page and try again.');
     };
-
     const handleModelError = (event: any) => {
       console.error('Model loading error:', event.detail);
       setError('Failed to load 3D model. Please check your internet connection and try again.');
     };
-
     document.addEventListener('arjs-video-error', handleSceneError);
     document.addEventListener('arjs-nft-error', handleSceneError);
     document.addEventListener('model-error', handleModelError);
@@ -67,50 +55,64 @@ const ARViewer = () => {
     };
   }, [modelUrl]);
 
-  // Force full-screen on mobile
+  // Force mobile full-screen
   useEffect(() => {
     const scene = document.querySelector('a-scene');
-    if (scene && scene.enterVR) {
-      scene.enterVR();
-    }
+    if (scene && scene.enterVR) scene.enterVR();
   }, []);
 
   const handleBackToMenu = () => navigate('/');
 
-  // Gesture handling for pinch/rotate
+  // Gesture handling: pinch to scale & swipe to rotate
   useEffect(() => {
     const model = document.getElementById('ar-model');
     if (!model) return;
 
-    let currentScale = 0.3;
-    let currentRotation = 0;
+    let initialDistance = 0;
+    let initialScale = 0.3;
+    let initialRotation = 0;
+    let lastTouchX = 0;
 
-    const onPinch = (event: any) => {
-      const scale = currentScale * event.detail.scale;
-      model.setAttribute('scale', `${scale} ${scale} ${scale}`);
+    const parseVector = (value: string) => value.split(' ').map(parseFloat);
+
+    const getDistance = (touches: TouchList) => {
+      if (touches.length < 2) return 0;
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.sqrt(dx * dx + dy * dy);
     };
 
-    const onRotate = (event: any) => {
-      const rotation = currentRotation + event.detail.positionChange.x * 180;
-      model.setAttribute('rotation', `0 ${rotation} 0`);
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 2) {
+        initialDistance = getDistance(e.touches);
+        const scaleValues = parseVector(model.getAttribute('scale') as string);
+        initialScale = scaleValues[0];
+      } else if (e.touches.length === 1) {
+        lastTouchX = e.touches[0].clientX;
+        const rotationValues = parseVector(model.getAttribute('rotation') as string);
+        initialRotation = rotationValues[1];
+      }
     };
 
-    const onGestureEnd = () => {
-      const scaleValues = parseVector(model.getAttribute('scale') as string);
-      currentScale = scaleValues[0];
-
-      const rotationValues = parseVector(model.getAttribute('rotation') as string);
-      currentRotation = rotationValues[1];
+    const onTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+      if (e.touches.length === 2) {
+        const newDistance = getDistance(e.touches);
+        const scale = initialScale * (newDistance / initialDistance);
+        model.setAttribute('scale', `${scale} ${scale} ${scale}`);
+      } else if (e.touches.length === 1) {
+        const deltaX = e.touches[0].clientX - lastTouchX;
+        const rotation = initialRotation + deltaX * 0.5;
+        model.setAttribute('rotation', `0 ${rotation} 0`);
+      }
     };
 
-    model.addEventListener('pinch', onPinch);
-    model.addEventListener('rotate', onRotate);
-    model.addEventListener('gestureend', onGestureEnd);
+    model.addEventListener('touchstart', onTouchStart, { passive: false });
+    model.addEventListener('touchmove', onTouchMove, { passive: false });
 
     return () => {
-      model.removeEventListener('pinch', onPinch);
-      model.removeEventListener('rotate', onRotate);
-      model.removeEventListener('gestureend', onGestureEnd);
+      model.removeEventListener('touchstart', onTouchStart);
+      model.removeEventListener('touchmove', onTouchMove);
     };
   }, []);
 
@@ -150,25 +152,20 @@ const ARViewer = () => {
           zIndex: 1,
         }}
       >
-        {/* Camera */}
         <a-entity camera></a-entity>
 
-        {/* 3D Model */}
         <a-entity
           id="ar-model"
-          gesture-detector
           gltf-model={`url(${modelUrl})`}
           scale="0.3 0.3 0.3"
           position="0 0 -1.5"
           rotation="0 0 0"
         ></a-entity>
 
-        {/* Lighting */}
         <a-light type="ambient" intensity="1"></a-light>
         <a-light type="directional" intensity="0.5" position="1 2 1"></a-light>
       </a-scene>
 
-      {/* Back Button */}
       <div className="absolute top-4 left-4 z-50">
         <Button
           onClick={handleBackToMenu}
