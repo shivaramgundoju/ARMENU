@@ -110,7 +110,7 @@ const ARViewer = () => {
   }
 
   return (
-    <div className="relative min-h-screen bg-black">
+    <div className="relative min-h-screen">
       {/* Back Button */}
       <div className="absolute top-4 left-4 z-50">
         <Button
@@ -131,14 +131,14 @@ const ARViewer = () => {
           <span className="font-semibold text-gray-800">AR Instructions</span>
         </div>
         <p className="text-sm text-gray-600">
-          The 3D model should appear in your camera view. If you see a black screen, ensure camera access is granted and try refreshing the page.
+          The 3D model should appear in your camera view.
         </p>
       </div>
 
       {/* A-Frame AR Scene */}
       <a-scene
         embedded
-        arjs="sourceType: webcam; debugUIEnabled: true;"
+        arjs="sourceType: webcam; debugUIEnabled: false;"
         vr-mode-ui="enabled: false"
         className="w-full h-screen"
       >
@@ -157,13 +157,6 @@ const ARViewer = () => {
         <a-light type="directional" intensity="1.5" position="1 1 1"></a-light>
         <a-light type="ambient" intensity="0.5"></a-light>
       </a-scene>
-
-      {/* Loading overlay for model */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="bg-white/90 rounded-lg px-4 py-2 shadow-lg">
-          <p className="text-sm text-gray-700">Loading 3D model...</p>
-        </div>
-      </div>
     </div>
   );
 };
