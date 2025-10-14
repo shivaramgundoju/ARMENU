@@ -8,6 +8,7 @@ import { Search, Box } from "lucide-react";
 
 const categories = ["All", "Starters", "Main Course", "Desserts", "Beverages"];
 
+// Updated to use .glb files from public/models
 const mockDishes = [
   {
     id: 1,
@@ -16,7 +17,7 @@ const mockDishes = [
     price: 14.99,
     category: "Main Course",
     image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400&h=300&fit=crop",
-    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Chicken/glTF/Chicken.gltf"
+    modelUrl: "/models/butter-chicken.glb"
   },
   {
     id: 2,
@@ -25,7 +26,7 @@ const mockDishes = [
     price: 12.99,
     category: "Main Course",
     image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop",
-    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Pizza/glTF/Pizza.gltf"
+    modelUrl: "/models/pizza.glb"
   },
   {
     id: 3,
@@ -34,7 +35,7 @@ const mockDishes = [
     price: 8.99,
     category: "Starters",
     image: "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400&h=300&fit=crop",
-    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Salad/glTF/Salad.gltf"
+    modelUrl: "/models/caesar-salad.glb"
   },
   {
     id: 4,
@@ -43,7 +44,7 @@ const mockDishes = [
     price: 6.99,
     category: "Desserts",
     image: "https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=400&h=300&fit=crop",
-    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/ChocolateCake/glTF/ChocolateCake.gltf"
+    modelUrl: "/models/chocolate-lava-cake.glb"
   },
   {
     id: 5,
@@ -52,7 +53,7 @@ const mockDishes = [
     price: 4.99,
     category: "Beverages",
     image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400&h=300&fit=crop",
-    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Orange/glTF/Orange.gltf"
+    modelUrl: "/models/fresh-orange-juice.glb"
   },
   {
     id: 6,
@@ -61,7 +62,7 @@ const mockDishes = [
     price: 7.99,
     category: "Starters",
     image: "https://images.unsplash.com/photo-1625395005224-0fce68a61f7f?w=400&h=300&fit=crop",
-    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/SpringRoll/glTF/SpringRoll.gltf"
+    modelUrl: "/models/spring-rolls.glb"
   },
   {
     id: 7,
@@ -70,7 +71,7 @@ const mockDishes = [
     price: 18.99,
     category: "Main Course",
     image: "https://images.unsplash.com/photo-1580959375944-57b487fab2b0?w=400&h=300&fit=crop",
-    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Salmon/glTF/Salmon.gltf"
+    modelUrl: "/models/grilled-salmon.glb"
   },
   {
     id: 8,
@@ -79,10 +80,9 @@ const mockDishes = [
     price: 7.99,
     category: "Desserts",
     image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&h=300&fit=crop",
-    modelUrl: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Tiramisu/glTF/Tiramisu.gltf"
+    modelUrl: "/models/tiramisu.glb"
   }
 ];
-
 
 const MenuGrid = () => {
   const navigate = useNavigate();
@@ -91,8 +91,9 @@ const MenuGrid = () => {
 
   const filteredDishes = mockDishes.filter((dish) => {
     const matchesCategory = selectedCategory === "All" || dish.category === selectedCategory;
-    const matchesSearch = dish.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         dish.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch =
+      dish.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      dish.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
@@ -145,26 +146,19 @@ const MenuGrid = () => {
                   alt={dish.name}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                 />
-                <Badge className="absolute top-3 right-3 bg-primary/90">
-                  {dish.category}
-                </Badge>
+                <Badge className="absolute top-3 right-3 bg-primary/90">{dish.category}</Badge>
               </div>
               <CardHeader>
                 <CardTitle className="text-xl">{dish.name}</CardTitle>
                 <CardDescription>{dish.description}</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-primary">
-                  ${dish.price.toFixed(2)}
-                </div>
+                <div className="text-2xl font-bold text-primary">${dish.price.toFixed(2)}</div>
               </CardContent>
               <CardFooter>
                 <Button
                   className="w-full hero-gradient border-0 text-white group"
-                  onClick={() => {
-                    // Use the actual model URL from dish data
-                    navigate(`/arviewer?model=${encodeURIComponent(dish.modelUrl)}`);
-                  }}
+                  onClick={() => navigate(`/arviewer?model=${encodeURIComponent(dish.modelUrl)}`)}
                 >
                   <Box className="mr-2 w-4 h-4 group-hover:rotate-12 transition-transform" />
                   View in AR
@@ -176,7 +170,9 @@ const MenuGrid = () => {
 
         {filteredDishes.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-xl text-muted-foreground">No dishes found. Try a different search or category.</p>
+            <p className="text-xl text-muted-foreground">
+              No dishes found. Try a different search or category.
+            </p>
           </div>
         )}
       </div>
