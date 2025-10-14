@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, AlertCircle } from 'lucide-react';
+import 'aframe-gesture-detector-component';
+
 
 // Import A-Frame, AR.js, and gesture-detector
 import 'aframe';
