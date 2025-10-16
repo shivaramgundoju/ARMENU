@@ -8,80 +8,15 @@ import { Search, Box } from "lucide-react";
 
 const categories = ["All", "Starters", "Main Course", "Desserts", "Beverages"];
 
-// Updated to use .glb files from public/models
 const mockDishes = [
-  {
-    id: 1,
-    name: "Butter Chicken",
-    description: "Creamy tomato-based curry with tender chicken pieces",
-    price: 199,
-    category: "Main Course",
-    image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400&h=300&fit=crop",
-    modelUrl: "/models/butter-chicken.glb"
-  },
-  {
-    id: 2,
-    name: "Margherita Pizza",
-    description: "Classic Italian pizza with fresh mozzarella and basil",
-    price: 199,
-    category: "Main Course",
-    image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop",
-    modelUrl: "/models/pizza.glb"
-  },
-  {
-    id: 3,
-    name: "Caesar Salad",
-    description: "Crisp romaine lettuce with parmesan and croutons",
-    price: 299,
-    category: "Starters",
-    image: "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400&h=300&fit=crop",
-    modelUrl: "/models/caesar-salad.glb"
-  },
-  {
-    id: 4,
-    name: "Chocolate Lava Cake",
-    description: "Warm chocolate cake with molten center",
-    price: 189,
-    category: "Desserts",
-    image: "https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=400&h=300&fit=crop",
-    modelUrl: "/models/chocolate-lava-cake.glb"
-  },
-  {
-    id: 5,
-    name: "Fresh Orange Juice",
-    description: "Freshly squeezed orange juice",
-    price: 79,
-    category: "Beverages",
-    image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400&h=300&fit=crop",
-    modelUrl: "/models/fresh-orange-juice.glb"
-  },
-  {
-    id: 6,
-    name: "Spring Rolls",
-    description: "Crispy vegetable spring rolls with sweet chili sauce",
-    price: 99,
-    category: "Starters",
-    image: "https://images.unsplash.com/photo-1669340781012-ae89fbac9fc3?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170",
-    modelUrl: "/models/spring-rolls.glb"
-  },
-  {
-    id: 7,
-    name: "Grilled Salmon",
-    description: "Atlantic salmon with herbs and lemon butter",
-    price: 299,
-    category: "Main Course",
-    image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170",
-    modelUrl: "/models/grilled-salmon.glb"
-  },
-  {
-    id: 8,
-    name: "Tiramisu",
-    description: "Classic Italian coffee-flavored dessert",
-    price: 199,
-    category: "Desserts",
-    image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&h=300&fit=crop",
-    modelUrl: "/models/tiramisu.glb"
-  }
+  { id: 1, name: "Butter Chicken", description: "Creamy tomato-based curry with tender chicken pieces", price: 199, category: "Main Course", image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400&h=300&fit=crop", modelUrl: "/models/butter-chicken.glb" },
+  { id: 2, name: "Margherita Pizza", description: "Classic Italian pizza with fresh mozzarella and basil", price: 199, category: "Main Course", image: "/models/pizza.glb", modelUrl: "/models/pizza.glb" },
+  { id: 3, name: "Caesar Salad", description: "Crisp romaine lettuce with parmesan and croutons", price: 299, category: "Starters", image: "/models/caesar-salad.glb", modelUrl: "/models/caesar-salad.glb" },
+  { id: 4, name: "Chocolate Lava Cake", description: "Warm chocolate cake with molten center", price: 189, category: "Desserts", image: "/models/chocolate-lava-cake.glb", modelUrl: "/models/chocolate-lava-cake.glb" },
+  { id: 5, name: "Fresh Orange Juice", description: "Freshly squeezed orange juice", price: 79, category: "Beverages", image: "/models/fresh-orange-juice.glb", modelUrl: "/models/fresh-orange-juice.glb" },
+  { id: 6, name: "Spring Rolls", description: "Crispy vegetable spring rolls with sweet chili sauce", price: 99, category: "Starters", image: "/models/spring-rolls.glb", modelUrl: "/models/spring-rolls.glb" },
+  { id: 7, name: "Grilled Salmon", description: "Atlantic salmon with herbs and lemon butter", price: 299, category: "Main Course", image: "/models/grilled-salmon.glb", modelUrl: "/models/grilled-salmon.glb" },
+  { id: 8, name: "Tiramisu", description: "Classic Italian coffee-flavored dessert", price: 199, category: "Desserts", image: "/models/tiramisu.glb", modelUrl: "/models/tiramisu.glb" }
 ];
 
 const MenuGrid = () => {
@@ -91,24 +26,18 @@ const MenuGrid = () => {
 
   const filteredDishes = mockDishes.filter((dish) => {
     const matchesCategory = selectedCategory === "All" || dish.category === selectedCategory;
-    const matchesSearch =
-      dish.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      dish.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = dish.name.toLowerCase().includes(searchQuery.toLowerCase()) || dish.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
   return (
     <section id="menu" className="py-20 px-4 bg-background">
       <div className="container mx-auto">
-        {/* Header */}
         <div className="text-center mb-12 space-y-4">
           <h2 className="text-4xl md:text-5xl font-bold">Our Menu</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Explore our delicious dishes in stunning 3D AR
-          </p>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Explore our delicious dishes in stunning 3D AR</p>
         </div>
 
-        {/* Search Bar */}
         <div className="max-w-md mx-auto mb-8">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
@@ -122,7 +51,6 @@ const MenuGrid = () => {
           </div>
         </div>
 
-        {/* Category Filters */}
         <div className="flex flex-wrap gap-3 justify-center mb-12">
           {categories.map((category) => (
             <Button
@@ -136,16 +64,11 @@ const MenuGrid = () => {
           ))}
         </div>
 
-        {/* Dishes Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredDishes.map((dish) => (
             <Card key={dish.id} className="card-glow overflow-hidden border-2 group">
               <div className="relative h-48 overflow-hidden">
-                <img
-                  src={dish.image}
-                  alt={dish.name}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                />
+                <img src={dish.image} alt={dish.name} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
                 <Badge className="absolute top-3 right-3 bg-primary/90">{dish.category}</Badge>
               </div>
               <CardHeader>
@@ -158,7 +81,7 @@ const MenuGrid = () => {
               <CardFooter>
                 <Button
                   className="w-full hero-gradient border-0 text-white group"
-                  onClick={() => navigate(`/arviewer?model=${encodeURIComponent(dish.modelUrl)}`)}
+                  onClick={() => navigate(`/arviewer?model=${encodeURIComponent(dish.modelUrl)}&name=${encodeURIComponent(dish.name)}`)}
                 >
                   <Box className="mr-2 w-4 h-4 group-hover:rotate-12 transition-transform" />
                   View in AR
@@ -170,9 +93,7 @@ const MenuGrid = () => {
 
         {filteredDishes.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-xl text-muted-foreground">
-              No dishes found. Try a different search or category.
-            </p>
+            <p className="text-xl text-muted-foreground">No dishes found. Try a different search or category.</p>
           </div>
         )}
       </div>
