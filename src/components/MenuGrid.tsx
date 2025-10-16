@@ -9,15 +9,90 @@ import { Search, Box } from "lucide-react";
 const categories = ["All", "Starters", "Main Course", "Desserts", "Beverages"];
 
 const mockDishes = [
-  { id: 1, name: "Butter Chicken", description: "Creamy tomato-based curry with tender chicken pieces", price: 199, category: "Main Course", image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400&h=300&fit=crop", modelUrl: "/models/butter-chicken.glb" },
-  { id: 2, name: "Margherita Pizza", description: "Classic Italian pizza with fresh mozzarella and basil", price: 199, category: "Main Course", image: "/models/pizza.glb", modelUrl: "/models/pizza.glb" },
-  { id: 3, name: "Caesar Salad", description: "Crisp romaine lettuce with parmesan and croutons", price: 299, category: "Starters", image: "/models/caesar-salad.glb", modelUrl: "/models/caesar-salad.glb" },
-  { id: 4, name: "Chocolate Lava Cake", description: "Warm chocolate cake with molten center", price: 189, category: "Desserts", image: "/models/chocolate-lava-cake.glb", modelUrl: "/models/chocolate-lava-cake.glb" },
-  { id: 5, name: "Fresh Orange Juice", description: "Freshly squeezed orange juice", price: 79, category: "Beverages", image: "/models/fresh-orange-juice.glb", modelUrl: "/models/fresh-orange-juice.glb" },
-  { id: 6, name: "Spring Rolls", description: "Crispy vegetable spring rolls with sweet chili sauce", price: 99, category: "Starters", image: "/models/spring-rolls.glb", modelUrl: "/models/spring-rolls.glb" },
-  { id: 7, name: "Grilled Salmon", description: "Atlantic salmon with herbs and lemon butter", price: 299, category: "Main Course", image: "/models/grilled-salmon.glb", modelUrl: "/models/grilled-salmon.glb" },
-  { id: 8, name: "Tiramisu", description: "Classic Italian coffee-flavored dessert", price: 199, category: "Desserts", image: "/models/tiramisu.glb", modelUrl: "/models/tiramisu.glb" }
+  {
+    id: 1,
+    name: "Burger",
+    description: "Juicy beef patty with melted cheese, lettuce, tomato, and special sauce",
+    price: 149,
+    category: "Main Course",
+    image: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2072",
+    modelUrl: "/models/burger.glb"
+  },
+  {
+    id: 2,
+    name: "Margherita Pizza",
+    description: "Classic Italian pizza with fresh mozzarella and basil",
+    price: 199,
+    category: "Main Course",
+    image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop",
+    modelUrl: "/models/pizza.glb"
+  },
+  {
+  id: 3,
+  name: "Chicken Biryani",
+  description: "Fragrant basmati rice cooked with tender chicken and aromatic spices",
+  price: 229,
+  category: "Main Course",
+  image: "https://authenticroyal.com/wp-content/uploads/2024/10/royal-rice-may-220461.jpg",
+  modelUrl: "/models/chicken-biryani.glb"
+  },
+  {
+  id: 4,
+  name: "Chicken Shawarma",
+  description: "Tender marinated chicken wrapped in soft flatbread with garlic sauce and veggies",
+  price: 159,
+  category: "Main Course",
+  image: "https://images.arla.com/recordid/A299C91F-5199-4329-9B9AEA35553BEBB3/picture.jpg?width=1269&height=715&mode=crop&format=webp",
+  modelUrl: "/models/chicken-shawarma.glb"
+},
+  {
+    id: 5,
+    name: "Chocolate Lava Cake",
+    description: "Warm chocolate cake with molten center",
+    price: 189,
+    category: "Desserts",
+    image: "https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=400&h=300&fit=crop",
+    modelUrl: "/models/lava-cake.glb"
+  },
+  {
+    id: 6,
+    name: "Fresh Orange Juice",
+    description: "Freshly squeezed orange juice",
+    price: 79,
+    category: "Beverages",
+    image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400&h=300&fit=crop",
+    modelUrl: "/models/fresh-orange-juice.glb"
+  },
+  {
+    id: 7,
+    name: "Spring Rolls",
+    description: "Crispy vegetable spring rolls with sweet chili sauce",
+    price: 99,
+    category: "Starters",
+    image: "https://images.unsplash.com/photo-1669340781012-ae89fbac9fc3?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170",
+    modelUrl: "/models/spring-rolls.glb"
+  },
+  {
+    id: 8,
+    name: "Grilled Salmon",
+    description: "Atlantic salmon with herbs and lemon butter",
+    price: 299,
+    category: "Main Course",
+    image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170",
+    modelUrl: "/models/grilled-salmon.glb"
+  },
+  {
+    id: 9,
+    name: "Tiramisu",
+    description: "Classic Italian coffee-flavored dessert",
+    price: 199,
+    category: "Desserts",
+    image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&h=300&fit=crop",
+    modelUrl: "/models/tiramisu.glb"
+  },
+
 ];
+
 
 const MenuGrid = () => {
   const navigate = useNavigate();
