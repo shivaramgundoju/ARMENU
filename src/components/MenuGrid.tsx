@@ -14,7 +14,7 @@ const mockDishes = [
     id: 1,
     name: "Butter Chicken",
     description: "Creamy tomato-based curry with tender chicken pieces",
-    price: 14.99,
+    price: 199,
     category: "Main Course",
     image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400&h=300&fit=crop",
     modelUrl: "/models/butter-chicken.glb"
@@ -23,7 +23,7 @@ const mockDishes = [
     id: 2,
     name: "Margherita Pizza",
     description: "Classic Italian pizza with fresh mozzarella and basil",
-    price: 12.99,
+    price: 199,
     category: "Main Course",
     image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop",
     modelUrl: "/models/pizza.glb"
@@ -32,7 +32,7 @@ const mockDishes = [
     id: 3,
     name: "Caesar Salad",
     description: "Crisp romaine lettuce with parmesan and croutons",
-    price: 8.99,
+    price: 299,
     category: "Starters",
     image: "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400&h=300&fit=crop",
     modelUrl: "/models/caesar-salad.glb"
@@ -41,7 +41,7 @@ const mockDishes = [
     id: 4,
     name: "Chocolate Lava Cake",
     description: "Warm chocolate cake with molten center",
-    price: 6.99,
+    price: 189,
     category: "Desserts",
     image: "https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=400&h=300&fit=crop",
     modelUrl: "/models/chocolate-lava-cake.glb"
@@ -50,7 +50,7 @@ const mockDishes = [
     id: 5,
     name: "Fresh Orange Juice",
     description: "Freshly squeezed orange juice",
-    price: 4.99,
+    price: 79,
     category: "Beverages",
     image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400&h=300&fit=crop",
     modelUrl: "/models/fresh-orange-juice.glb"
@@ -59,25 +59,25 @@ const mockDishes = [
     id: 6,
     name: "Spring Rolls",
     description: "Crispy vegetable spring rolls with sweet chili sauce",
-    price: 7.99,
+    price: 99,
     category: "Starters",
-    image: "https://images.unsplash.com/photo-1625395005224-0fce68a61f7f?w=400&h=300&fit=crop",
+    image: "https://images.unsplash.com/photo-1669340781012-ae89fbac9fc3?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170",
     modelUrl: "/models/spring-rolls.glb"
   },
   {
     id: 7,
     name: "Grilled Salmon",
     description: "Atlantic salmon with herbs and lemon butter",
-    price: 18.99,
+    price: 299,
     category: "Main Course",
-    image: "https://images.unsplash.com/photo-1580959375944-57b487fab2b0?w=400&h=300&fit=crop",
+    image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170",
     modelUrl: "/models/grilled-salmon.glb"
   },
   {
     id: 8,
     name: "Tiramisu",
     description: "Classic Italian coffee-flavored dessert",
-    price: 7.99,
+    price: 199,
     category: "Desserts",
     image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&h=300&fit=crop",
     modelUrl: "/models/tiramisu.glb"
@@ -153,7 +153,7 @@ const MenuGrid = () => {
                 <CardDescription>{dish.description}</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-primary">${dish.price.toFixed(2)}</div>
+                <div className="text-2xl font-bold text-primary">₹{dish.price.toFixed(2)}</div>
               </CardContent>
               <CardFooter>
                 <Button
